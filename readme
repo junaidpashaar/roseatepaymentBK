@@ -1,0 +1,63 @@
+# Razorpay Payment Link Generator with Webhook Integration
+
+A complete Node.js application for dynamically generating Razorpay payment links and handling payment webhooks with MySQL storage.
+
+## Features
+
+- ✅ Dynamic payment link generation
+- ✅ Custom amount, currency, and customer details
+- ✅ Webhook integration for payment success/failure
+- ✅ MySQL database for payment links and transaction history
+- ✅ Automatic signature verification for webhooks
+- ✅ Transaction history tracking
+
+## Prerequisites
+
+- Node.js (v14 or higher)
+- MySQL (v5.7 or higher)
+- Razorpay account with API credentials
+
+## Installation
+
+### 1. Clone and Install Dependencies
+
+```bash
+npm install
+```
+
+### 2. Setup MySQL Database
+
+Create a database:
+```sql
+CREATE DATABASE razorpay_payments;
+```
+
+The tables will be created automatically when you start the server.
+
+### 3. Configure Environment Variables
+
+Create a `.env` file in the root directory and add:
+
+```env
+RAZORPAY_KEY_ID=your_razorpay_key_id
+RAZORPAY_KEY_SECRET=your_razorpay_key_secret
+RAZORPAY_WEBHOOK_SECRET=your_webhook_secret
+
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=razorpay_payments
+
+PORT=3000
+CALLBACK_URL=http://localhost:3000
+```
+
+### 4. Get Razorpay Credentials
+
+1. Login to [Razorpay Dashboard](https://dashboard.razorpay.com/)
+2. Go to Settings → API Keys
+3. Generate Test/Live keys
+4. For webhook secret: Settings → Webhooks → Create webhook
+5. Set webhook URL:
+
+CREATE DATABASE razorpay_payments;
