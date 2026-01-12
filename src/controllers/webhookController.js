@@ -21,6 +21,7 @@ class WebhookController {
    */
   async handleWebhook(req, res, next) {
     try {
+      console.log("req.body",req.body);
       const signature = req.headers['x-razorpay-signature'];
       const payload = req.body;
 
