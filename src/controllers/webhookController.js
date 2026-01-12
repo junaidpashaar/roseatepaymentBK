@@ -21,16 +21,8 @@ class WebhookController {
    */
   async handleWebhook(req, res, next) {
     try {
-      console.log("reqBody",JSON.stringify(req.body));
       const signature = req.headers['x-razorpay-signature'];
       const payload = req.body;
-
-      if (!signature) {
-        return res.status(400).json({
-          success: false,
-          message: 'Missing webhook signature'
-        });
-      }
 
       const result = await webhookService.processWebhook(payload, signature);
 

@@ -6,14 +6,7 @@ const reservationService = require('./reservationService');
 
 class WebhookService {
   // Process webhook events
-  async processWebhook(payload, signature) {
-    // Verify webhook signature
-    const isValid = verifyWebhookSignature(payload, signature);
-    
-    if (!isValid) {
-      throw new Error('Invalid webhook signature');
-    }
-
+  async processWebhook(payload) {
     const event = payload.event;
     console.log(`Processing webhook event: ${event}`);
 
