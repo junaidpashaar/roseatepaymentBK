@@ -45,14 +45,14 @@ class WebhookService {
     // Store transaction history
     await TransactionModel.create({
       payment_link_id: paymentLinkId,
-      payment_id: paymentEntity.id,
-      order_id: paymentEntity.order_id,
-      amount: paymentEntity.amount / 100,
-      currency: paymentEntity.currency,
+      payment_id: paymentEntity?.id,
+      order_id: paymentEntity?.order_id,
+      amount: paymentEntity?.amount / 100,
+      currency: paymentEntity?.currency,
       status: 'success',
-      method: paymentEntity.method,
-      email: paymentEntity.email,
-      contact: paymentEntity.contact,
+      method: paymentEntity?.method,
+      email: paymentEntity?.email,
+      contact: paymentEntity?.contact,
       webhook_payload: payload
     });
 
@@ -71,23 +71,23 @@ async handlePaymentCaptured(payload) {
 
   // Create transaction record
   const transaction = await TransactionModel.create({
-    payment_id: paymentEntity.id,
-    order_id: paymentEntity.order_id,
-    amount: paymentEntity.amount / 100,
-    currency: paymentEntity.currency,
+    payment_id: paymentEntity?.id,
+    order_id: paymentEntity?.order_id,
+    amount: paymentEntity?.amount / 100,
+    currency: paymentEntity?.currency,
     status: 'captured',
-    method: paymentEntity.method,
-    email: paymentEntity.email,
-    contact: paymentEntity.contact,
+    method: paymentEntity?.method,
+    email: paymentEntity?.email,
+    contact: paymentEntity?.contact,
     webhook_payload: payload,
     deposit_api_calls: null // Will be updated after API calls
   }); 
 
-  console.log(`✓ Payment captured: ${paymentEntity.id}`);
+  console.log(`✓ Payment captured: ${paymentEntity?.id}`);
 
   // Extract and parse info from notes
   try {
-    const notes = paymentEntity.notes;
+    const notes = paymentEntity?.notes || [];
     if (notes && notes.info) {
       const info = JSON.parse(notes.info);
       const { hotelId, reservationId, amount, type, policyIds, description } = info;
@@ -131,7 +131,7 @@ async handlePaymentCaptured(payload) {
 
             console.log(`✓ Deposit payment posted successfully for policyId: ${depositPolicyId}`);
           } catch (error) {
-            console.error(`✗ Failed to post deposit for policyId: ${depositPolicyId}`, error.message);
+            console.error(`✗ Failed to post deposit for policyId: ${depositPolicyId}`, error?.message);
             
             apiCallResults.push({
               type: 'deposit',
@@ -139,7 +139,7 @@ async handlePaymentCaptured(payload) {
               request: {
                 hotelId,
                 reservationId,
-                amount: amount.toString(),
+                amount: amount?.toString(),
                 depositPolicyId
               },
               response: null,
@@ -167,7 +167,7 @@ async handlePaymentCaptured(payload) {
           const result = await reservationService.postDepositPaymentAdhoc({
             hotelId,
             reservationId,
-            amount: amount.toString(),
+            amount: amount?.toString(),
             paymentMethod: 'CA',
             folioWindowNo: '1'
           });
@@ -215,7 +215,7 @@ async handlePaymentCaptured(payload) {
           const result = await reservationService.postPayment({
             hotelId,
             reservationId,
-            amount: amount.toString(),
+            amount: amount?.toString(),
             paymentMethod: 'CA',
             folioWindowNo: '1'
           });
@@ -294,20 +294,20 @@ async handlePaymentCaptured(payload) {
     const paymentEntity = payload.payload.payment.entity;
 
     await TransactionModel.create({
-      payment_id: paymentEntity.id,
-      order_id: paymentEntity.order_id,
-      amount: paymentEntity.amount / 100,
-      currency: paymentEntity.currency,
+      payment_id: paymentEntity?.id,
+      order_id: paymentEntity?.order_id,
+      amount: paymentEntity?.amount / 100,
+      currency: paymentEntity?.currency,
       status: 'failed',
-      method: paymentEntity.method,
-      email: paymentEntity.email,
-      contact: paymentEntity.contact,
-      error_code: paymentEntity.error_code,
-      error_description: paymentEntity.error_description,
+      method: paymentEntity?.method,
+      email: paymentEntity?.email,
+      contact: paymentEntity?.contact,
+      error_code: paymentEntity?.error_code,
+      error_description: paymentEntity?.error_description,
       webhook_payload: payload
     });
 
-    console.log(`✗ Payment failed: ${paymentEntity.id}`);
+    console.log(`✗ Payment failed: ${paymentEntity?.id}`);
     
     return { 
       message: 'Payment failure recorded', 
@@ -317,7 +317,7 @@ async handlePaymentCaptured(payload) {
 
   // Handle payment link cancelled event
   async handlePaymentLinkCancelled(payload) {
-    const paymentLinkEntity = payload.payload.payment_link.entity;
+    const paymentLinkEntity = payload?.payload?.payment_link?.entity;
     const paymentLinkId = paymentLinkEntity.id;
 
     await PaymentLinkModel.updateStatus(paymentLinkId, 'cancelled');
@@ -332,7 +332,7 @@ async handlePaymentCaptured(payload) {
 
   // Handle payment link expired event
   async handlePaymentLinkExpired(payload) {
-    const paymentLinkEntity = payload.payload.payment_link.entity;
+    const paymentLinkEntity = payload?.payload?.payment_link?.entity;
     const paymentLinkId = paymentLinkEntity.id;
 
     await PaymentLinkModel.updateStatus(paymentLinkId, 'expired');

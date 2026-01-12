@@ -85,12 +85,12 @@ class ReservationService {
   async getCheckoutFolio(hotelId, reservationId) {
     try {
       const token = await authService.getAccessToken();
-      const url = `${hotelApiConfig.baseUrl}/csh/v1/hotels/${hotelId}/reservations/${reservationId}/folios?folioWindowNo=1&limit=50&fetchInstructions=Postings&fetchInstructions=Totalbalance&fetchInstructions=Transactioncodes&fetchInstructions=Windowbalances`;
+      const url = `${hotelApiConfig?.baseUrl}/csh/v1/hotels/${hotelId}/reservations/${reservationId}/folios?folioWindowNo=1&limit=50&fetchInstructions=Postings&fetchInstructions=Totalbalance&fetchInstructions=Transactioncodes&fetchInstructions=Windowbalances`;
 
       const headers = {
         'Content-Type': 'application/json',
         'x-hotelid': hotelId,
-        'x-app-key': hotelApiConfig.appKey,
+        'x-app-key': hotelApiConfig?.appKey,
         'Authorization': `Bearer ${token}`
       };
 
@@ -130,8 +130,8 @@ class ReservationService {
       return {
         success: true,
         data: {
-          reservation: reservationResult.data,
-          depositFolio: depositFolioResult.data
+          reservation: reservationResult?.data,
+          depositFolio: depositFolioResult?.data
         }
       };
     } catch (error) {
@@ -216,7 +216,7 @@ class ReservationService {
       const headers = {
         'Content-Type': 'application/json',
         'x-hotelid': hotelId,
-        'x-app-key': hotelApiConfig.appKey,
+        'x-app-key': hotelApiConfig?.appKey,
         'Authorization': `Bearer ${token}`
       };
 
@@ -267,13 +267,13 @@ class ReservationService {
     folioWindowNo = '1'
   }) {
     try {
-      const url = `${hotelApiConfig.baseUrl}/csh/v1/hotels/${hotelId}/reservations/${reservationId}/payments`;
+      const url = `${hotelApiConfig?.baseUrl}/csh/v1/hotels/${hotelId}/reservations/${reservationId}/payments`;
       const token = await authService.getAccessToken();
       
       const headers = {
         'Content-Type': 'application/json',
         'x-hotelid': hotelId,
-        'x-app-key': hotelApiConfig.appKey,
+        'x-app-key': hotelApiConfig?.appKey,
         'Authorization': `Bearer ${token}`
       };
 
@@ -374,15 +374,15 @@ class ReservationService {
     try {
       const result = await this.getReservation(hotelId, reservationId);
       
-      if (!result.data?.reservations?.reservation?.[0]) {
+      if (!result?.data?.reservations?.reservation?.[0]) {
         return {
           valid: false,
           message: 'Reservation not found'
         };
       }
 
-      const reservation = result.data.reservations.reservation[0];
-      const status = reservation.reservationStatus;
+      const reservation = result?.data?.reservations?.reservation[0];
+      const status = reservation?.reservationStatus;
 
       if (status === 'Cancel' || status === 'Cancelled') {
         return {
