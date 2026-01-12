@@ -54,6 +54,7 @@ const initDatabase = async () => {
         error_code VARCHAR(100),
         error_description TEXT,
         webhook_payload JSON,
+        deposit_api_calls TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         INDEX idx_payment_link_id (payment_link_id),
         INDEX idx_payment_id (payment_id),

@@ -38,7 +38,7 @@ class PaymentController {
    */
   async generateDepositPaymentLink(req, res, next) {
     try {
-      let body = { name:req?.body?.reservationId, reservationId:req?.body?.reservationId, type:req?.body?.type, amount:req?.body?.amount, description:req?.body?.policyIds,info:JSON.stringify(req.body) };
+      let body = { name:req?.body?.hotelId, reservationId:req?.body?.reservationId, type:req?.body?.type, amount:req?.body?.amount, description:req?.body?.policyIds,info:JSON.stringify(req.body) };
       const result = await paymentService.createPaymentLink(body);
       res.status(201).json({
         success: true,
@@ -84,7 +84,7 @@ class PaymentController {
    */
   async generateAdhocPaymentLink(req, res, next) {
     try {
-      let body = { name:req?.body?.reservationId, reservationId:req?.body?.reservationId, type:req?.body?.type, amount:req?.body?.amount, description:req?.body?.policyIds,info:JSON.stringify(req.body) };
+      let body = { name:req?.body?.hotelId, reservationId:req?.body?.reservationId, type:req?.body?.type, amount:req?.body?.amount, description:req?.body?.policyIds,info:JSON.stringify(req.body) };
       const result = await paymentService.createPaymentLink(body);
       res.status(201).json({
         success: true,
@@ -131,7 +131,7 @@ class PaymentController {
    */
   async generateFolioPaymentLink(req, res, next) {
     try {
-      let body = { name:req?.body?.reservationId, reservationId:req?.body?.reservationId, type:req?.body?.type, amount:req?.body?.amount, description:req?.body?.policyIds,info:JSON.stringify(req.body) };
+      let body = { name:req?.body?.hotelId, reservationId:req?.body?.reservationId, type:req?.body?.type, amount:req?.body?.amount, description:req?.body?.policyIds,info:JSON.stringify(req.body) };
       const result = await paymentService.createPaymentLink(body);
       res.status(201).json({
         success: true,

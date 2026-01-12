@@ -142,6 +142,8 @@ class ReservationService {
   /**
    * Post deposit payment
    */
+  
+  // Existing postDepositPayment method (with policy ID)
   async postDepositPayment({
     hotelId = '1',
     reservationId = '1',
@@ -181,17 +183,82 @@ class ReservationService {
       };
 
       const response = await axios.post(url, payload, { headers });
-      return { success: true, data: response.data };
+      
+      return { 
+        success: true, 
+        data: response.data,
+        request: payload
+      };
     } catch (error) {
       console.error('Post deposit payment error:', error.response?.data || error.message);
       if (error.response?.status === 401) authService.clearToken();
-      throw new Error(error.response?.data?.detail || error.response?.data?.title || 'Failed to post deposit payment');
+      
+      throw new Error(
+        error.response?.data?.detail || 
+        error.response?.data?.title || 
+        'Failed to post deposit payment'
+      );
     }
   }
 
-  /**
-   * Post regular payment
-   */
+  // NEW: Adhoc deposit payment (without policy ID)
+  async postDepositPaymentAdhoc({
+    hotelId = '1',
+    reservationId = '1',
+    amount = '1',
+    paymentMethod = 'CA',
+    folioWindowNo = '1'
+  }) {
+    try {
+      const token = await authService.getAccessToken();
+      const url = `${hotelApiConfig.baseUrl}/csh/v1/hotels/${hotelId}/reservations/${reservationId}/depositPayments`;
+
+      const headers = {
+        'Content-Type': 'application/json',
+        'x-hotelid': hotelId,
+        'x-app-key': hotelApiConfig.appKey,
+        'Authorization': `Bearer ${token}`
+      };
+
+      // Payload WITHOUT depositPolicyId for adhoc payments
+      const payload = {
+        criteria: {
+          reservationId: { type: 'Reservation', id: reservationId },
+          guaranteeCode: 'GDP',
+          updateReservationPaymentMethod: false,
+          hotelId,
+          paymentMethod: { paymentMethod, folioView: folioWindowNo },
+          postingReference: 'TransactionId',
+          postingAmount: { amount, currencyCode: 'INR' },
+          comments: 'Adhoc Payment - PaymentGateway Reference#',
+          applyCCSurcharge: false,
+          overrideInsufficientCC: false,
+          overrideARCreditLimit: false,
+          cashierId: '1',
+          folioWindowNo
+        }
+      };
+
+      const response = await axios.post(url, payload, { headers });
+      
+      return { 
+        success: true, 
+        data: response.data,
+        request: payload
+      };
+    } catch (error) {
+      console.error('Post adhoc deposit payment error:', error.response?.data || error.message);
+      if (error.response?.status === 401) authService.clearToken();
+      
+      throw new Error(
+        error.response?.data?.detail || 
+        error.response?.data?.title || 
+        'Failed to post adhoc deposit payment'
+      );
+    }
+  }
+
+  // NEW: Folio payment (different endpoint)
   async postPayment({
     hotelId = '1',
     reservationId = '1',
@@ -202,6 +269,7 @@ class ReservationService {
     try {
       const url = `${hotelApiConfig.baseUrl}/csh/v1/hotels/${hotelId}/reservations/${reservationId}/payments`;
       const token = await authService.getAccessToken();
+      
       const headers = {
         'Content-Type': 'application/json',
         'x-hotelid': hotelId,
@@ -226,13 +294,78 @@ class ReservationService {
       };
 
       const response = await axios.post(url, payload, { headers });
-      return { success: true, data: response.data };
+      
+      return { 
+        success: true, 
+        data: response.data,
+        request: payload
+      };
     } catch (error) {
       console.error('Post payment error:', error.response?.data || error.message);
       if (error.response?.status === 401) authService.clearToken();
-      throw new Error(error.response?.data?.detail || error.response?.data?.title || 'Failed to post payment');
+      
+      throw new Error(
+        error.response?.data?.detail || 
+        error.response?.data?.title || 
+        'Failed to post payment'
+      );
     }
   }
+  /**
+   * Post regular payment
+   */
+  async postPaymentOld({
+  hotelId = '1',
+  reservationId = '1',
+  amount = '1',
+  paymentMethod = 'CA',
+  folioWindowNo = '1'
+}) {
+  try {
+    const url = `${hotelApiConfig.baseUrl}/csh/v1/hotels/${hotelId}/reservations/${reservationId}/payments`;
+    const token = await authService.getAccessToken();
+    
+    const headers = {
+      'Content-Type': 'application/json',
+      'x-hotelid': hotelId,
+      'x-app-key': hotelApiConfig.appKey,
+      'Authorization': `Bearer ${token}`
+    };
+
+    const payload = {
+      criteria: {
+        overrideInsufficientCC: false,
+        applyCCSurcharge: false,
+        vATOffset: false,
+        reservationId: { id: reservationId, idContext: 'OPERA', type: 'Reservation' },
+        paymentMethod: { paymentMethod },
+        postingReference: 'PaymentGateway Reference#',
+        postingAmount: { amount, currencyCode: 'INR' },
+        cashierId: 1,
+        hotelId,
+        folioWindowNo,
+        overrideARCreditLimit: false
+      }
+    };
+
+    const response = await axios.post(url, payload, { headers });
+    
+    return { 
+      success: true, 
+      data: response.data,
+      request: payload
+    };
+  } catch (error) {
+    console.error('Post payment error:', error.response?.data || error.message);
+    if (error.response?.status === 401) authService.clearToken();
+    
+    throw new Error(
+      error.response?.data?.detail || 
+      error.response?.data?.title || 
+      'Failed to post payment'
+    );
+  }
+}
 
   /**
    * Validate reservation status
