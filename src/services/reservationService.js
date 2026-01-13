@@ -268,6 +268,7 @@ class ReservationService {
   }) {
     try {
       const url = `${hotelApiConfig?.baseUrl}/csh/v1/hotels/${hotelId}/reservations/${reservationId}/payments`;
+      console.log("url",url);
       const token = await authService.getAccessToken();
       
       const headers = {

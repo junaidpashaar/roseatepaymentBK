@@ -90,8 +90,9 @@ async handlePaymentCaptured(payload) {
     const notes = paymentEntity?.notes || [];
     if (notes && notes.info) {
       const info = JSON.parse(notes.info);
-      const { hotelId, reservationId, amount, type, policyIds, description } = info;
-
+      console.log("info",info);
+      const { hotelId, reservationId, amount, type, policyIds,folioIds, description } = info;
+      console.log("folioIds",folioIds);
       // Array to store all API call results
       const apiCallResults = [];
 
@@ -198,52 +199,62 @@ async handlePaymentCaptured(payload) {
             timestamp: new Date().toISOString()
           });
         }
-      } else if (type === 'folios') {
-        // CASE 3: Folio payment (different API endpoint)
-        try {
-          console.log('Calling folio payment API');
-          
-          const apiCallData = {
-            hotelId,
-            reservationId,
-            amount: amount.toString(),
-            type: 'folios',
-            timestamp: new Date().toISOString()
-          };
-
-          // Call folio payment API
-          const result = await reservationService.postPayment({
-            hotelId,
-            reservationId,
-            amount: amount?.toString(),
-            paymentMethod: 'CA',
-            folioWindowNo: '1'
-          });
-
-          apiCallResults.push({
-            type: 'folios',
-            request: apiCallData,
-            response: result,
-            status: 'success',
-            timestamp: new Date().toISOString()
-          });
-
-          console.log('✓ Folio payment posted successfully');
-        } catch (error) {
-          console.error('✗ Failed to post folio payment:', error.message);
-          
-          apiCallResults.push({
-            type: 'folios',
-            request: {
+      } else if (folioIds) {
+        // CASE 3: Folio payment (different API endpoint) 
+        const folioIdArray = folioIds.split(',').filter(id => id.trim());
+        
+        console.log(`Processing ${folioIdArray.length} folio(s)`);
+        
+        for (const folioId of folioIdArray) {
+          try {
+            console.log(`Calling folio payment API for folioWindowNo: ${folioId}`);
+            
+            const apiCallData = {
               hotelId,
               reservationId,
-              amount: amount.toString()
-            },
-            response: null,
-            error: error.message,
-            status: 'failed',
-            timestamp: new Date().toISOString()
-          });
+              amount: amount.toString(),
+              type: 'folios',
+              folioWindowNo: folioId.trim(),
+              timestamp: new Date().toISOString()
+            };
+
+            // Call folio payment API for each folio
+            const result = await reservationService.postPayment({
+              hotelId,
+              reservationId,
+              amount: amount?.toString(),
+              paymentMethod: 'CA',
+              folioWindowNo: folioId.trim()
+            });
+
+            apiCallResults.push({
+              type: 'folios',
+              folioWindowNo: folioId.trim(),
+              request: apiCallData,
+              response: result,
+              status: 'success',
+              timestamp: new Date().toISOString()
+            });
+
+            console.log(`✓ Folio payment posted successfully for folioWindowNo: ${folioId}`);
+          } catch (error) {
+            console.error(`✗ Failed to post folio payment for folioWindowNo: ${folioId}`, error.message);
+            
+            apiCallResults.push({
+              type: 'folios',
+              folioWindowNo: folioId.trim(),
+              request: {
+                hotelId,
+                reservationId,
+                amount: amount.toString(),
+                folioWindowNo: folioId.trim()
+              },
+              response: null,
+              error: error.message,
+              status: 'failed',
+              timestamp: new Date().toISOString()
+            });
+          }
         }
       } else {
         // Unknown type

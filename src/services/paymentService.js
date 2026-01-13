@@ -20,7 +20,7 @@ class PaymentService {
     // Create payment link via Razorpay API
     const paymentLinkData = {
       amount: Math.round(amount * 100), // Convert to paise
-      currency: currency.toUpperCase(),
+      currency: currency?.toUpperCase(),
       description: description || `Payment for ${name}`,
       customer: {
         name: name,
@@ -41,7 +41,6 @@ class PaymentService {
           source: data?.type
         }
     };
-
     const paymentLink = await razorpay.paymentLink.create(paymentLinkData);
     // Store in database
     await PaymentLinkModel.create({
