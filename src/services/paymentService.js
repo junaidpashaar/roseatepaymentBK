@@ -32,7 +32,7 @@ class PaymentService {
         email: email ? true : false
       },
       reminder_enable: true,
-      callback_url: `${process.env.CALLBACK_URL || 'http://localhost:3000'}/payment-success`,
+      callback_url: 'https://ui.techproduto.com/payment-success',
       callback_method: 'get',
         notes: {
           hotelId:data?.name,
