@@ -22,9 +22,6 @@ router.post('/links/:id/cancel', paymentController.cancelPaymentLink);
 // Get transactions for a payment link
 router.get('/links/:id/transactions', paymentController.getTransactionsByPaymentLink);
 
-// Get transactions with paymentId
-router.get('/links/:id/transactions', paymentController.getTransactionsByPaymentLink);
-
 // Get all transactions
 router.get('/transactions', paymentController.getAllTransactions);
 

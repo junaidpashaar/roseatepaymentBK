@@ -265,7 +265,6 @@ async handlePaymentCaptured(payload) {
           timestamp: new Date().toISOString()
         });
       }
-      console.log("transaction",transaction);
       // Update transaction with API call results
       await TransactionModel.findByPaymentId(
         {payment_id:paymentEntity.id},

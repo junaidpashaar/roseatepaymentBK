@@ -54,7 +54,7 @@ class TransactionModel {
 
   // Find transactions by payment link ID
   static async findByPaymentLinkId(payment_link_id) {
-    const query = 'SELECT * FROM transaction_history WHERE payment_link_id = ? ORDER BY created_at DESC';
+    const query = 'SELECT * FROM transaction_history WHERE payment_id = ? ORDER BY created_at DESC';
     const [rows] = await pool.query(query, [payment_link_id]);
     return rows;
   }
