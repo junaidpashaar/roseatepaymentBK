@@ -51,7 +51,9 @@ class PaymentService {
       amount: amount,
       currency: currency.toUpperCase(),
       description: description,
-      short_url: paymentLink.short_url
+      short_url: paymentLink.short_url,
+      hotelId: data?.name,
+      reservationId: data?.reservationId,
     });
 
     return {

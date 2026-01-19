@@ -4,12 +4,12 @@ const { pool } = require('../config/database');
 class PaymentLinkModel {
   // Create new payment link record
   static async create(data) {
-    const { payment_link_id, customer_name, customer_email, customer_phone, amount, currency, description, short_url } = data;
+    const { payment_link_id, customer_name, customer_email, customer_phone, amount, currency, description, short_url,hotelId,reservationId } = data;
     
     const query = `
       INSERT INTO payment_links 
-      (payment_link_id, customer_name, customer_email, customer_phone, amount, currency, description, short_url, status) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'created')
+      (payment_link_id, customer_name, customer_email, customer_phone, amount, currency, description, short_url,hotelId, reservationId, status) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?,?,?, 'created')
     `;
     
     const [result] = await pool.query(query, [
@@ -20,7 +20,9 @@ class PaymentLinkModel {
       amount,
       currency,
       description || null,
-      short_url
+      short_url,
+      hotelId,
+      reservationId
     ]);
     
     return result;

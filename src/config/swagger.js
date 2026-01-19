@@ -1,5 +1,7 @@
 const swaggerJSDoc = require('swagger-jsdoc');
 
+const isProd = process.env.NODE_ENV === 'production';
+
 const options = {
   definition: {
     openapi: '3.0.0',
@@ -10,8 +12,10 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:3000',
-        description: 'Local server',
+        url: isProd
+          ? 'https://payments.roseatehotels.com/bk'
+          : 'http://localhost:3000',
+        description: isProd ? 'Production server' : 'Local server',
       },
     ],
   },

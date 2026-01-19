@@ -61,3 +61,7 @@ CALLBACK_URL=http://localhost:3000
 5. Set webhook URL:
 
 CREATE DATABASE razorpay_payments;
+
+ALTER TABLE payment_links
+ADD COLUMN hotelId TEXT,
+ADD COLUMN reservationId TEXT;

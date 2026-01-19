@@ -29,6 +29,8 @@ const initDatabase = async () => {
         currency VARCHAR(10) DEFAULT 'INR',
         description TEXT,
         short_url TEXT,
+        hotelId TEXT, 
+        reservationId TEXT,
         status VARCHAR(50) DEFAULT 'created',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
