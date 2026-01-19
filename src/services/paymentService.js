@@ -6,7 +6,7 @@ const TransactionModel = require('../models/transactionModel');
 class PaymentService {
   // Create payment link
   async createPaymentLink(data) {
-    const { name, email, phone, amount, currency = 'INR', description } = data;
+    const { name, email, phone, amount, currency = 'INR', description, guestName } = data;
 
     // Validate required fields
     if (!name || !amount) {
@@ -21,7 +21,7 @@ class PaymentService {
     const paymentLinkData = {
       amount: Math.round(amount * 100), // Convert to paise
       currency: currency?.toUpperCase(),
-      description: description || `Payment for ${name}`,
+      description: description || `Reservation #${data?.reservationId} - ${guestName}`,
       customer: {
         name: name,
         email: email || undefined,
