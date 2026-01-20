@@ -67,7 +67,7 @@ class WebhookService {
   // Handle payment captured event
 // Handle payment captured event
 async handlePaymentCaptured(payload) {
-  console.log("payload",payload);
+  console.log("payload2list",JSON.stringify(payload));
   const paymentEntity = payload.payload.payment.entity;
 
   // Create transaction record
