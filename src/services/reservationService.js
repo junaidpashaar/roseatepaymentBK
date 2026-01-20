@@ -150,7 +150,8 @@ class ReservationService {
     amount = '1',
     paymentMethod = 'CA',
     folioWindowNo = '1',
-    depositPolicyId = '1'
+    depositPolicyId = '1',
+    comments = 'PaymentGateway Reference#'
   }) {
     try {
       const token = await authService.getAccessToken();
@@ -173,7 +174,7 @@ class ReservationService {
           paymentMethod: { paymentMethod, folioView: folioWindowNo },
           postingReference: 'TransactionId',
           postingAmount: { amount, currencyCode: 'INR' },
-          comments: 'PaymentGateway Reference#',
+          comments: comments || 'PaymentGateway Reference#',
           applyCCSurcharge: false,
           overrideInsufficientCC: false,
           overrideARCreditLimit: false,
@@ -207,7 +208,8 @@ class ReservationService {
     reservationId = '1',
     amount = '1',
     paymentMethod = 'CA',
-    folioWindowNo = '1'
+    folioWindowNo = '1',
+    comments = 'Adhoc Payment - PaymentGateway Reference#'
   }) {
     try {
       const token = await authService.getAccessToken();
@@ -230,7 +232,7 @@ class ReservationService {
           paymentMethod: { paymentMethod, folioView: folioWindowNo },
           postingReference: 'TransactionId',
           postingAmount: { amount, currencyCode: 'INR' },
-          comments: 'Adhoc Payment - PaymentGateway Reference#',
+          comments: comments,
           applyCCSurcharge: false,
           overrideInsufficientCC: false,
           overrideARCreditLimit: false,
@@ -264,7 +266,8 @@ class ReservationService {
     reservationId = '1',
     amount = '1',
     paymentMethod = 'CA',
-    folioWindowNo = '1'
+    folioWindowNo = '1',
+    comments: comments
   }) {
     try {
       const url = `${hotelApiConfig?.baseUrl}/csh/v1/hotels/${hotelId}/reservations/${reservationId}/payments`;
@@ -285,7 +288,7 @@ class ReservationService {
           vATOffset: false,
           reservationId: { id: reservationId, idContext: 'OPERA', type: 'Reservation' },
           paymentMethod: { paymentMethod },
-          postingReference: 'PaymentGateway Reference#',
+          postingReference: comments  || 'PaymentGateway Reference#',
           postingAmount: { amount, currencyCode: 'INR' },
           cashierId: 1,
           hotelId,
@@ -320,7 +323,8 @@ class ReservationService {
   reservationId = '1',
   amount = '1',
   paymentMethod = 'CA',
-  folioWindowNo = '1'
+  folioWindowNo = '1',
+  comments = 'PaymentGateway Reference#',
 }) {
   try {
     const url = `${hotelApiConfig.baseUrl}/csh/v1/hotels/${hotelId}/reservations/${reservationId}/payments`;
@@ -340,7 +344,7 @@ class ReservationService {
         vATOffset: false,
         reservationId: { id: reservationId, idContext: 'OPERA', type: 'Reservation' },
         paymentMethod: { paymentMethod },
-        postingReference: 'PaymentGateway Reference#',
+        postingReference: comments || 'PaymentGateway Reference#',
         postingAmount: { amount, currencyCode: 'INR' },
         cashierId: 1,
         hotelId,

@@ -67,6 +67,7 @@ class WebhookService {
   // Handle payment captured event
 // Handle payment captured event
 async handlePaymentCaptured(payload) {
+  console.log("payload",payload);
   const paymentEntity = payload.payload.payment.entity;
 
   // Create transaction record
@@ -89,10 +90,8 @@ async handlePaymentCaptured(payload) {
   try {
     const notes = paymentEntity?.notes || [];
     if (notes && notes.info) {
-      const info = JSON.parse(notes.info);
-      console.log("info",info);
+      const info = JSON.parse(notes.info); 
       const { hotelId, reservationId, amount, type, policyIds,folioIds, description } = info;
-      console.log("folioIds",folioIds);
       // Array to store all API call results
       const apiCallResults = [];
 
@@ -116,9 +115,10 @@ async handlePaymentCaptured(payload) {
               hotelId,
               reservationId,
               amount: amount.toString(),
-              paymentMethod: 'CA',
+              paymentMethod: paymentEntity?.method || 'CA',
               folioWindowNo: '1',
-              depositPolicyId
+              depositPolicyId,
+              comments:paymentEntity.id
             });
 
             apiCallResults.push({
@@ -169,8 +169,9 @@ async handlePaymentCaptured(payload) {
             hotelId,
             reservationId,
             amount: amount?.toString(),
-            paymentMethod: 'CA',
-            folioWindowNo: '1'
+            paymentMethod: paymentEntity?.method || 'CA',
+            folioWindowNo: '1',
+            comments:paymentEntity.id
           });
 
           apiCallResults.push({
@@ -223,8 +224,9 @@ async handlePaymentCaptured(payload) {
               hotelId,
               reservationId,
               amount: amount?.toString(),
-              paymentMethod: 'CA',
-              folioWindowNo: folioId.trim()
+              paymentMethod: paymentEntity?.method || 'CA',
+              folioWindowNo: folioId.trim(),
+              comments:paymentEntity.id
             });
 
             apiCallResults.push({
