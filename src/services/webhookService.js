@@ -115,7 +115,7 @@ async handlePaymentCaptured(payload) {
               hotelId,
               reservationId,
               amount: amount.toString(),
-              paymentMethod: 'RZ',
+              paymentMethod: 'CA',
               folioWindowNo: '1',
               depositPolicyId,
               comments:paymentEntity?.id
@@ -169,7 +169,7 @@ async handlePaymentCaptured(payload) {
             hotelId,
             reservationId,
             amount: amount?.toString(),
-            paymentMethod: 'RZ',
+            paymentMethod: 'CA',
             folioWindowNo: '1',
             comments:paymentEntity?.id
           });
@@ -224,7 +224,7 @@ async handlePaymentCaptured(payload) {
               hotelId,
               reservationId,
               amount: amount?.toString(),
-              paymentMethod: 'RZ',
+              paymentMethod: 'CA',
               folioWindowNo: folioId.trim(),
               comments:paymentEntity?.id
             });
