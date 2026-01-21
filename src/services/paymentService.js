@@ -32,7 +32,7 @@ class PaymentService {
         email: email ? true : false
       },
       reminder_enable: true,
-      callback_url: 'https://ui.techproduto.com/payment-success',
+      callback_url: 'https://payments.roseatehotels.com/payment-success',
       callback_method: 'get',
         notes: {
           hotelId:data?.name,
